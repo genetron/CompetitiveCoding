@@ -1,0 +1,66 @@
+************************************18-07-16********************************************************************
+
+##################################Info about garbage collection.################################################
+
+- java objects are stored in heap dynamically.
+- In c++ - if new()->on heap else on stack.
+- In java, declaring a variable only creates reference. To allocate a memory , must use "new"
+
+----Garbage collection------
+- java object recides is in heap.
+- if heap==full, garbage collected
+- heap : 1)nursery 2)old space
+- nursery is reserved for the allocation of the new objects
+- nursery is full -> garbage is collected by running "young collection", where objects long lived are promoted to "old space" -> frees nursery
+- when the old space becomes full, garbage is collected there by process named as "old collection"
+- newer version also contains "keep area" in the "nursery"
+
+-----object allocation--------
+- before allocation, distinguish between small and large object.
+- small objects are allocated in "THREAD LOCAL AREAS (TLAs)"
+- free chuncks reserved from the heap and given to thread.
+- thread can allocate objects to TLA without syncronizing with other threads.
+- TLA == full -> thread requests new TLA
+- reserved from nursery (if exists)
+- large objects don't fill in TLA -> allocated in the heap.
+- directly to "old space"
+- allocation of large objects require more thread synchronization
+
+------garbage collection---------------
+1. Mark and sweep model
+2. Generationsal Garbage collection
+3. Dynamic and static gabage collection modes
+4. Compaction
+
+1. Mark and sweep model
+- for g.c. of whole heap.
+- two phases : mark phase and a sweep phase
+- all reachable (from thread, native handles etc) marked as alive.. objects from reachable from this also.. and so forth.
+- these are objects still used and rest are garbage
+- during sweep : heap is traversed to find gaps between the live objects. 
+- these gaps are recorded in free list and made availbale for new object allocation.
+- two subtypes (a) concurrent m & s (b) parallel m & s
+
+	(a)concurrent gc / concurrent m and s :
+	Java threads run continuously for large part. Stops few times for thread synchronization.
+	mostly concurrent mark phase is divided into four parts:
+	- Initial marking : root set of live objects is identified. (done while java threads are paused.)
+	- Concurrent Marking : where the references are followed to find live objects in heap and marked. (done while java threads are running).
+	- Precleaning : where changes made during concurrent marking are identified and any additional live objects are marked. (threads running).
+	- Final marking : changes in precleaning are identified and marked. found and marked live objects. (Threads paused).
+
+	mostly concurrent sweep phase :
+	- sweeping of one half of the  heap. when threads running and allowed to allocate objects in heap area which is not being swept.
+	- short pause to swith halves.
+	- other half sweeping. threads running, allowed to allocate object in the previous object.
+	- short pause for synchronization and recording statistics.
+
+	(b) parallel m & s:
+	- Uses all CPUs to sweep entire heap as fast as possible. all threads are paused.
+
+2. Generational GC :
+-related with nursery and young collection
+
+3. Dynamic and static
+
+4. Compaction
