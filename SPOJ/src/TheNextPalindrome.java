@@ -3,6 +3,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
+/*
+ * http://www.spoj.com/problems/PALIN/
+ */
+
+/* 
+ *Status : Running in eclipse and ideone, NZEC in SPOJ. 
+ */
+
 public class TheNextPalindrome {
 	public static void main(String[] args) throws IOException {
 		Scanner scanner = new Scanner(System.in);
