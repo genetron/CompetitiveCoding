@@ -9,9 +9,11 @@ public class TheNextPalindrome {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		int t = Integer.parseInt(br.readLine());
-		//scanner.nextLine();
+//		int t=scanner.nextInt();
+//		scanner.nextLine();
 
 		while(t>0){
+//			String s = scanner.nextLine();
 			String s = br.readLine();
 			char c[] = s.toCharArray();
 
